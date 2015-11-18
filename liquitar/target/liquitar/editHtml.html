@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-eqiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+		<link rel="shortcut icon" src="image/wu.png">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/liquitar.css">
+		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+		<script type="text/javascript" src="js/liquitar.js"></script>
+		<style type="text/css">
+			html,body{
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				font-family: "Helvetica Neue",Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;
+			}
+		</style>
+		<script type="text/javascript">
+			var ckeditor;
+			$(function(){
+				editorInit();
+				getTechList(0,"techFirst");
+			});
+			function editorInit(){
+				ckeditor = CKEDITOR.replace('liquitarEditor');
+			}
+			function getTechList(pId,id){
+				$.ajax({
+					url:'php/getTechList.php',
+					type:'post',
+					dataType:'json',
+					// async:false,
+					data:"pId="+pId,
+					success:function(info){
+						if(info.code==0){
+							var str = '<option value="0" selected="selected">--请选择--</option>';
+							var $techFirst = $("#"+id);
+							var optionArray = info.detail;
+							for(var i=0;i<optionArray.length;i++){
+								var opt = eval(optionArray[i]);
+								str = str + "<option value='"+opt.id+"'>"+opt.techName+"</option>";
+							}
+							$techFirst.html(str);
+						}
+					},
+					error:function(info){
+						console.log("error:"+info.responseText);
+					}
+				});
+			}
+			function loadTechSecond(){
+				var $techFirst = $("#techFirst");
+				var pId = $techFirst.val();
+				if(pId==0){
+					return;
+				}
+				getTechList(pId,"techSecond");
+			}
+			function saveArticle(){
+				var doc = ckeditor.getData();
+				var articleType = $("#techFirst").val();
+				var articleItem = $("#techSecond").val();
+				var articleTitle = $("#articleTitle").val();
+				var postObj = {articleType:articleType,articleItem:articleItem,articleTitle:articleTitle,articleDoc:doc};
+				if(articleType=="0"||articleItem=="0"){
+					alert("请选择文章类型！");
+				}
+				$.ajax({
+					url:'php/saveArticle.php',
+					type:'post',
+					dataType:'json',
+					// async:false,
+					// data:"articleType="+articleType+"&articleItem="+articleItem+"&articleTitle="+articleTitle+"&articleDoc="+doc,
+					data:postObj,
+					success:function(info){
+						if(info.code==0){
+							showResult(0,"文章提交保存成功!");
+						}else{
+							showResult(1,"文章提交保存失败!");
+						}
+					},
+					error:function(info){
+					}
+				});
+				// console.log(articleType+";"+articleItem);
+			}
+		</script>
+	</head>
+	<body>
+		<header id="top" class="navbar navbar-static-top bs-docs-nav" role="banner">
+			<div class="container" style="text-align:center;">
+				<div class="navbar-header">
+					<a href="http://www.liquitar.com" class="navbar-brand">Liquitar</a>
+				</div>
+				<nav id="bs-navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="#">JAVA学习</a>
+						</li>
+						<li>
+							<a href="applesetup.html">HTML学习</a>
+						</li>
+						<li>
+							<a href="#">MYSQL学习</a>
+						</li>
+						<li>
+							<a href="sayhello.php">PHP学习</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="#" onclick="javascript:showModal();"><span class="glyphicon glyphicon-hand-right"></span>联系作者</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+		<div class="container">
+			<div class="row">
+				<label class="col-sm-1">技术类型:</label>
+				<select class="col-sm-2" id="techFirst" onchange="javascript:loadTechSecond();">
+					<option value="0" selected="selected">--请选择--</option>
+				</select>
+				<label class="col-sm-1">详细分类:</label>
+				<select class="col-sm-2" id="techSecond">
+					<option value="0" selected="selected">--请选择--</option>
+				</select>
+				<br>
+			</div>
+			<br>
+			<div class="row">
+				<label class="col-sm-1">标题</label>
+				<input type="text" class="col-sm-3" id="articleTitle" placeholder="文章标题">
+			</div>
+			<br>
+			<div class="row">
+				<textarea name="liquitarEditor" id="liquitarEditor" rows="10" cols="80">
+	                请输入文章内容
+	            </textarea>
+			</div>
+			<div class="row" style="margin-top:15px;">
+				<button class="btn btn-primary" onclick="saveArticle();">保存</button>
+			</div>
+		</div>
+		<footer class="bs-docs-footer">
+			<div class="container">
+				<p>&copy;2015 Liquitar 豫ICP备15004612号</p>
+				<p class="f-l-s">友情链接：
+					<a href="http://www.andubu.com">andubu</a>
+					<a href="http://www.wsprint.cn">wsprint</a>
+			</p>
+			</div>
+		</footer>
+		<div class="modal fade" id="contractMe">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">建议/意见</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal">
+							<div class="form-group has-feedback">
+								<label for="userName" class="col-sm-3 control-label ">姓名：</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" placeholder="姓名" exp="^[a-zA-Z]{1}[a-zA-Z\.\s]{1,31}|[\u4e00-\u9fa5]{1,16}$" id="userName" name="userName">
+									<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								</div>
+								<div class="col-sm-4 tips">
+									<span style="color:red;">*</span>&nbsp;姓名只能输入汉字和英文字符
+								</div>
+							</div>
+							<div class="form-group has-feedback">
+								<label for="cellPhone" class="col-sm-3 control-label">手机：</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" placeholder="手机号" exp="^1\d{10}$" id="cellPhone" name="phone">
+									<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								</div>
+								<div class="col-sm-4 tips">
+									<span style="color:red;">*</span>&nbsp;手机号为11们数字
+								</div>
+							</div>
+							<div class="form-group has-feedback">
+								<label for="qqNo" class="col-sm-3 control-label">QQ号：</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" placeholder="QQ号码" exp="^[1-9][0-9]{4,12}$" id="qqNo" name="qq">
+									<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								</div>
+								<div class="col-sm-4 tips">
+									<span style="color:red;">*</span>&nbsp;QQ号为5位到13位数字
+								</div>
+							</div>
+							<div class="form-group has-feedback">
+								<label for="suggestion" class="col-sm-3 control-label" >宝贵建议：</label>
+								<div class="col-sm-5">
+									<textarea class="form-control" row="3" name="advice"></textarea>
+									<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								</div>
+								<div class="col-sm-4 tips">
+									<span style="color:red;">*</span>&nbsp;不含有特殊字符，长度为200字以内
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" onclick="submitAdvice();">提交</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="alertModal">
+			<div class="modal-dialog">
+				<div class="modal-content m-d-r">
+					<div class="modal-body icon-body">
+						<div class="row" style="height:140px;">
+							<div class="col-sm-2 icon-tip"><span class="glyphicon glyphicon-alert g-r"></span></div>
+							<div class="col-sm-8 tip-text">
+								表单提交出错，请联系管理员liquitar!
+							</div>
+						</div>
+						<div class="row" style="text-align:center;">
+							<button type="button" class="btn btn-warning btn-result" onclick="hideResult();">确定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
