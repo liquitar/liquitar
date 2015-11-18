@@ -17,10 +17,42 @@
        http://www.springframework.org/schema/aop  
        http://www.springframework.org/schema/aop/spring-aop.xsd">
            <!-- 打开基于注解的配置 -->
-    <context:annotation-config />
+    <!-- <context:annotation-config /> -->
     
     <!-- 开启组件自动扫描 -->
     <context:component-scan base-package="com.liquitar.server.*"/>
     <bean id="liquitarServer" class="com.liquitar.server.handler.ServerHandler" init-method="init" >
     </bean>
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:Configuration.xml"/>
+    </bean>
+    
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.liquitar.server.mapper"/>
+    </bean>
+    
+    <!--设置拦截的路径  mvc:mapping指定到哪个action ,  用mappingURL匹配方法-->    
+    <mvc:interceptors>    
+        <mvc:interceptor>    
+            <mvc:mapping path="/*/*.shtml" />   
+            <mvc:exclude-mapping path="/login/*.shtml"/>
+            <bean class="com.liquitar.server.interceptor.LoginInterceptorController"/>   
+        </mvc:interceptor>    
+    </mvc:interceptors> 
+    
+    <!-- 文件上传 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:defaultEncoding="UTF-8" ></bean>
 </beans>
