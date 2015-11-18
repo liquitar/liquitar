@@ -8,6 +8,7 @@ F:\workspace\myserver\liquitar\src\main\java\com\liquitar\server\service\IUserSe
 F:\workspace\myserver\liquitar\src\main\java\com\liquitar\www\util\MD5Util.java
 F:\workspace\myserver\liquitar\src\main\java\com\liquitar\www\util\GenerateCode.java
 F:\workspace\myserver\liquitar\src\main\java\com\liquitar\server\constant\Constant.java
+F:\workspace\myserver\liquitar\src\main\java\com\liquitar\server\controller\ChessController.java
 F:\workspace\myserver\liquitar\src\main\java\com\liquitar\server\controller\MybatisController.java
 F:\workspace\myserver\liquitar\src\main\java\com\liquitar\server\service\impl\UserServiceImpl.java
 F:\workspace\myserver\liquitar\src\main\java\com\liquitar\server\model\User.java

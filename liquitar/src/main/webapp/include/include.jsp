@@ -7,3 +7,4 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/bootstrap.min.css">
 <script type="text/javascript" src="<%=basePath%>/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/js/liquitar.js"></script>

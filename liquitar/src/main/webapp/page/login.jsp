@@ -40,16 +40,18 @@
             <h2>用户登录</h2>
             <div class="lgn">
                 <form class="form-horizontal">
-                    <div class="form-group">
+                    <div class="form-group has-feedback">
                         <label for="userName" class="col-sm-4 control-label">用户名</label>
                         <div class="col-sm-6">
                           <input type="text" class="form-control" id="userName" placeholder="用户名">
+                          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group has-feedback">
                         <label for="userPwd" class="col-sm-4 control-label">用户密码</label>
                         <div class="col-sm-6">
                           <input type="password" class="form-control" id="userPwd" placeholder="用户密码">
+                          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
                     <!--
@@ -65,7 +67,7 @@
                     -->
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-6" style="text-align: left;">
-                          <button type="submit" class="btn btn-default">登录</button>
+                          <button type="button" class="btn btn-default" onclick="">登录</button>
                         </div>
                     </div>
                 </form>
